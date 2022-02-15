@@ -1,5 +1,6 @@
-# Shanghai University Of Engineering Science 体温填报脚本
+## Shanghai University Of Engineering Science 体温填报脚本
 本地部署方法（小提示）：
+
 （注：request文件夹里已提供谷歌浏览器安装包、谷歌浏览器驱动和VC_redist.x64安装包）
 
 1、安装好 Python3.8环境、谷歌浏览器 和 VC_redist.x64！！
