@@ -2,6 +2,7 @@
 上海工程技术大学体温填报程序，支持数字和滑动验证码
 ## exe打包版现已更新
 请去查看Releases 
+https://github.com/666fy666/suestwtb/releases/tag/twtb
 ## 本地部署方法（小提示）：
 （注：request文件夹里已提供谷歌浏览器安装包、谷歌浏览器驱动和VC_redist.x64安装包）
 
