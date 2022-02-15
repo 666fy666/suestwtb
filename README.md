@@ -3,7 +3,7 @@
 ## exe打包版现已更新
 请去查看Releases 
 https://github.com/666fy666/suestwtb/releases/tag/twtb
-## 本地部署方法（小提示）：
+## 本地部署方法（python源码运行，如不会部署，可用exe打包版）：
 （注：request文件夹里已提供谷歌浏览器安装包、谷歌浏览器驱动和VC_redist.x64安装包）
 
 1、安装好 Python3.8环境、谷歌浏览器 和 VC_redist.x64！！
