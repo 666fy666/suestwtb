@@ -62,8 +62,8 @@ def main():
     bro.implicitly_wait(2)
     username = bro.find_element(By.XPATH, '//*[@id="username"]')
     password = bro.find_element(By.XPATH, '//*[@id="password"]')
-    username.send_keys('101319104')  # 输入用户名
-    password.send_keys('Fy12345678')  # 输入密码
+    username.send_keys('')  # 输入用户名
+    password.send_keys('')  # 输入密码
     Digit_save_path = join(File_Path, Digit_Path)
     try:
         with open(join(Digit_save_path, Digit_Filename), 'wb+') as d:
@@ -102,18 +102,6 @@ def main():
             bro.save_screenshot('1.png')
             bro.find_element(By.XPATH, '/html/body/div[4]/div[3]/a').click()
             print("第%s次滑动时成功" % i)
-            with open(r'fy.txt', 'a+', encoding='utf-8') as test:
-                test.truncate(0)
-            with open(r'fy.txt', 'a+', encoding='utf-8') as test:
-                now = time.strftime('%Y.%m.%d %H:%M:%S ', time.localtime(time.time()))
-                test.write('填报时间：')
-                test.write(now)
-                test.write('\n')
-                test.write('学号：101319104\n')
-                test.write('当前体温：')
-                test.write(str(temprature))
-                test.write('\n')
-                test.write("第%s次滑动时成功" % i)
             return {'code': 200, 'status': 'success'}
         except Exception as e:
             # print(e)
@@ -125,4 +113,4 @@ def main():
 if __name__ == '__main__':
     ret = main()
 bro.quit()
-# os.system('python push.py')
+
