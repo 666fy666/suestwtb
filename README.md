@@ -4,7 +4,7 @@
 
 1、安装好 Python3.8环境、谷歌浏览器 和 VC_redist.x64！！
 
-2、安装selenium框架，电脑win+r 运行cmd 复制输入：pip install selenium 然后回车！！等待安装完成，可能时间较长
+2、安装opencv，ddddocr，selenium框架，电脑win+r 运行cmd 复制输入：pip install selenium 然后回车！！以此类推，等待安装完成，可能时间较长
 （1，2两步如有问题，百度即可）
 
 3、下载谷歌驱动chrome driver（版本号一定要对应，例如你安装97.0.4692.71的谷歌浏览器，就下载4692的驱动，这四位一样就行）
