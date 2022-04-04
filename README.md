@@ -5,7 +5,7 @@
 https://github.com/666fy666/suestwtb/releases/tag/v2.0
 ## exe打包版（单人版）现已更新
 请去查看Releases 
-https://github.com/666fy666/suestwtb/releases/tag/twtb
+https://github.com/666fy666/suestwtb/releases/tag/v1.0
 ## 本地部署方法（python源码运行，如不会部署，可用exe打包版）：
 （注：request文件夹里已提供谷歌浏览器安装包、谷歌浏览器驱动和VC_redist.x64安装包）
 
