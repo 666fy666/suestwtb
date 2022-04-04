@@ -1,9 +1,9 @@
 # Shanghai University Of Engineering Science 体温填报脚本
 上海工程技术大学体温填报程序，支持多账号，数字和滑动验证码
-## exe打包版（多人版）现已更新
+## exe打包版（多人版）现已更新v2.0
 请去查看Releases 
 https://github.com/666fy666/suestwtb/releases/tag/v2.0
-## exe打包版（单人版）现已更新
+## exe打包版（单人版）现已更新v1.0
 请去查看Releases 
 https://github.com/666fy666/suestwtb/releases/tag/v1.0
 ## 本地部署方法（python源码运行，如不会部署，可用exe打包版）：
