@@ -69,12 +69,12 @@ def main(i):
     driver.find_element_by_xpath("//*[@id='form']/div[18]/div[1]/div/div[2]/div/div/input").send_keys(str(temprature))
     driver.find_element_by_xpath('//*[@id="post"]').click()
     try:
-        error = driver.find_element_by_xpath('/html/body/div[4]/div/div/div/div[2]/div[3]')
+        error = driver.find_element_by_xpath('/html/body/div[3]/div/div/div/div[2]/div[3]')
         error.click()
     except Exception as e:
         time.sleep(2)
-        background = driver.find_element(By.XPATH, '/html/body/div[4]/div/div/div/div[1]/img[1]').get_attribute('src')
-        img1 = driver.find_element(By.XPATH, '/html/body/div[4]/div/div/div/div[1]/img[2]').get_attribute('src')
+        background = driver.find_element(By.XPATH, '/html/body/div[3]/div/div/div/div[1]/img[1]').get_attribute('src')
+        img1 = driver.find_element(By.XPATH, '/html/body/div[3]/div/div/div/div[1]/img[2]').get_attribute('src')
         img1 = img1.split(',')
         background = background.split(',')
         i = base64.b64decode(img1[1])
@@ -94,7 +94,7 @@ def main(i):
         th, tw = tp_pic.shape[:2]
         tl = max_loc
         result = (tl[0] + tw / 2, tl[1] + th / 2)
-        slide_btn = driver.find_element(By.XPATH, '/html/body/div[4]/div/div/div/div[2]/div[2]/div[2]')
+        slide_btn = driver.find_element(By.XPATH, '/html/body/div[3]/div/div/div/div[2]/div[2]/div[2]')
         act = ActionChains(driver).drag_and_drop_by_offset(slide_btn, xoffset=result[0] - 27, yoffset=0)
         act.perform()
         act.release()
@@ -105,7 +105,7 @@ def main(i):
         try:
             time.sleep(2)
             driver.save_screenshot('%s.png' % accounts)
-            driver.find_element(By.XPATH, '/html/body/div[4]/div[3]/a').click()
+            driver.find_element(By.XPATH, '/html/body/div[3]/div[3]/a').click()
             print("第%s次滑动时成功" % u)
             print("学号：%s" % accounts)
             print("当前体温：%s" % temprature)
@@ -113,13 +113,13 @@ def main(i):
         except Exception as e:
             print("第%s次滑动失败，正在重试" % u)
             try:
-                error = driver.find_element_by_xpath('/html/body/div[4]/div/div/div/div[2]/div[3]')
+                error = driver.find_element_by_xpath('/html/body/div[3]/div/div/div/div[2]/div[3]')
                 error.click()
             except Exception as e:
                 time.sleep(2)
-                background = driver.find_element(By.XPATH, '/html/body/div[4]/div/div/div/div[1]/img[1]').get_attribute(
+                background = driver.find_element(By.XPATH, '/html/body/div[3]/div/div/div/div[1]/img[1]').get_attribute(
                     'src')
-                img1 = driver.find_element(By.XPATH, '/html/body/div[4]/div/div/div/div[1]/img[2]').get_attribute('src')
+                img1 = driver.find_element(By.XPATH, '/html/body/div[3]/div/div/div/div[1]/img[2]').get_attribute('src')
                 img1 = img1.split(',')
                 background = background.split(',')
                 i = base64.b64decode(img1[1])
@@ -139,7 +139,7 @@ def main(i):
                 th, tw = tp_pic.shape[:2]
                 tl = max_loc
                 result = (tl[0] + tw / 2, tl[1] + th / 2)
-                slide_btn = driver.find_element(By.XPATH, '/html/body/div[4]/div/div/div/div[2]/div[2]/div[2]')
+                slide_btn = driver.find_element(By.XPATH, '/html/body/div[3]/div/div/div/div[2]/div[2]/div[2]')
                 act = ActionChains(driver).drag_and_drop_by_offset(slide_btn, xoffset=result[0] - 27, yoffset=0)
                 act.perform()
                 act.release()
