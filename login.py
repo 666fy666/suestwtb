@@ -1,79 +1,77 @@
-import os
-import cv2
-import time
-import json
-import random
 import base64
-import smtplib
-import requests
+import os
+import re
+import time
+
+import cv2
 import ddddocr as docr
-from os.path import join
-from email.header import Header
-from email.mime.text import MIMEText
+from selenium.webdriver import ActionChains
 from selenium.webdriver import Chrome
-from email.mime.image import MIMEImage
+from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
-from email.mime.multipart import MIMEMultipart
-from selenium.webdriver.common.action_chains import ActionChains
+from selenium.webdriver.common.keys import Keys
 
-File_Path = 'D:/Auto_Temp'
-acc_file = 'acc.txt'
-pwd_file = 'pwd.txt'
-Digit_Path = '/Digit_Temp'
-Digit_Xpath = "//*[@id='fm1']/div[4]/img"
-Digit_Filename = '/digit.png'
-
-with open(join(File_Path, acc_file), 'r+', encoding='utf-8') as f_acc:
+with open("acc.txt", 'r+', encoding='utf-8') as f_acc:
     acc_ar = f_acc.read().splitlines()
-
-with open(join(File_Path, pwd_file), 'r+', encoding='utf-8') as f_pwd:
-    pwd_ar = f_pwd.read().splitlines()
-
 print("正在读取账号信息")
-time.sleep(1)
-c = str(len(acc_ar))
-print("读取完毕，本次将进行%s个账号填报" % c)
+d = str(len(acc_ar))
+print("读取完毕，本次将进行%s个账号填报" % d)
 
 
 def main(i):
-    driver = Chrome()
-    driver.get('https://web-vpn.sues.edu.cn')
-    # driver.maximize_window()
-    time.sleep(2)
-    accounts = acc_ar[i]
-    pwd = pwd_ar[i]
-    print("正在执行当前进程，学号为：%s" % accounts)
-    driver.find_element_by_xpath(
-        "//*[@id='username']").send_keys(accounts)
-    driver.find_element_by_xpath(
-        "//*[@id='password']").send_keys(pwd)
-    Digit_save_path = join(File_Path, File_Path)
-    with open(join(Digit_save_path, Digit_Filename), 'wb+') as d:
-        d.write(driver.find_element_by_xpath(Digit_Xpath).screenshot_as_png)
+    opt = Options()
+    opt.add_argument('--no-sandbox')  # 解决DevToolsActivePort文件不存在的报错
+    opt.add_argument('window-size=1000x1150')  # 设置浏览器分辨率
+    opt.add_argument('--disable-gpu')  # 谷歌文档提到需要加上这个属性来规避bug
+    # opt.add_argument('--hide-scrollbars')  # 隐藏滚动条，应对一些特殊页面
+    # opt.add_argument('blink-settings=imagesEnabled=false')  # 不加载图片，提升运行速度
+    opt.add_argument('--headless')  # 浏览器不提供可视化界面。Linux下如果系统不支持可视化不加这条会启动失败
+    driver = Chrome(options=opt)  # 创建Chrome无界面对象
+    num = i + 1
+    print("正在执行第%s个进程" % num)
+    total = acc_ar[i]
+    allin = re.split(r'[:：]', total)
+    accounts = re.search(r'\w+', allin[0])
+    accounts = accounts.group()
+    pwd = allin[1]
+    print("账号：【{}】，密码：【{}】".format(accounts, pwd))
+    driver.get('https://webvpn.sues.edu.cn')
+    driver.find_element_by_xpath("//*[@id='username']").send_keys(accounts)
+    driver.find_element_by_xpath("//*[@id='password']").send_keys(pwd)
+    with open("digit.png", 'wb+') as d:
+        d.write(driver.find_element_by_xpath("//*[@id='fm1']/div[4]/img").screenshot_as_png)
     ocr = docr.DdddOcr()
-    with open(join(Digit_save_path, Digit_Filename), 'rb') as d:
+    with open("digit.png", 'rb') as d:
         img_bytes = d.read()
     res = ocr.classification(img_bytes)
+    os.remove("digit.png")
     driver.find_element_by_xpath("//*[@id='authcode']").send_keys(str(res))
     driver.find_element_by_xpath("//*[@id='passbutton']").click()
-    os.remove(join(Digit_save_path, Digit_Filename))
+    try:
+        time.sleep(3)
+        driver.find_element_by_xpath(
+            "//*[@id='__layout']/div/div/div[3]/div/div[2]/div/div[1]/div/div[1]/div/div[1]/a/div[2]/h2").click()
+    except:
+        time.sleep(3)
+        driver.find_element_by_xpath("//*[@id='group-4']/div[2]/div/div[2]").click()
     time.sleep(2)
-    driver.find_element_by_xpath("//*[@id='group-4']/div[2]/div/div[2]/p[2]").click()
-    time.sleep(3)
+    print("登陆成功")
     handles = driver.window_handles
     driver.switch_to.window(handles[1])
-    a = random.uniform(36, 37)
-    temprature = round(a, 1)
-    print("系统随机生成体温：%s" % temprature)
-    driver.find_element_by_xpath("//*[@id='form']/div[18]/div[1]/div/div[2]/div/div/input").clear()
-    driver.find_element_by_xpath("//*[@id='form']/div[18]/div[1]/div/div[2]/div/div/input").send_keys(str(temprature))
+    time.sleep(2)
+    name = driver.find_element_by_xpath("//*[@id='form']/div[6]/div[1]/div/div[2]/div/div/span")
+    who = str(name.text)
+    driver.find_element_by_xpath('//*[@id="form"]/div[15]/div/div/div[2]/div/div/label[2]/div/ins').click()
+    driver.find_element_by_xpath('//*[@id="form"]/div[18]/div/div/div[2]/div/div/label[1]/div/ins').click()
+    print("姓名：【{}】".format(who))
     driver.find_element_by_xpath('//*[@id="post"]').click()
     try:
         error = driver.find_element_by_xpath('/html/body/div[3]/div/div/div/div[2]/div[3]')
         error.click()
     except Exception as e:
         time.sleep(2)
-        background = driver.find_element(By.XPATH, '/html/body/div[3]/div/div/div/div[1]/img[1]').get_attribute('src')
+        background = driver.find_element(By.XPATH, '/html/body/div[3]/div/div/div/div[1]/img[1]').get_attribute(
+            'src')
         img1 = driver.find_element(By.XPATH, '/html/body/div[3]/div/div/div/div[1]/img[2]').get_attribute('src')
         img1 = img1.split(',')
         background = background.split(',')
@@ -94,21 +92,22 @@ def main(i):
         th, tw = tp_pic.shape[:2]
         tl = max_loc
         result = (tl[0] + tw / 2, tl[1] + th / 2)
+        os.remove('img.png')
+        os.remove('background.png')
         slide_btn = driver.find_element(By.XPATH, '/html/body/div[3]/div/div/div/div[2]/div[2]/div[2]')
         act = ActionChains(driver).drag_and_drop_by_offset(slide_btn, xoffset=result[0] - 27, yoffset=0)
         act.perform()
         act.release()
-        os.remove('img.png')
-        os.remove('background.png')
-    # 设置有30次的重试机会
-    for u in range(1, 30):
+    for u in range(1, 99):  # 设置有30次的重试机会
         try:
+            driver.find_element_by_tag_name('body').send_keys(Keys.CONTROL + Keys.HOME)
             time.sleep(2)
-            driver.save_screenshot('%s.png' % accounts)
+            driver.save_screenshot('log/%s.png' % accounts)
             driver.find_element(By.XPATH, '/html/body/div[3]/div[3]/a').click()
+            time.sleep(2)
+            driver.quit()
             print("第%s次滑动时成功" % u)
-            print("学号：%s" % accounts)
-            print("当前体温：%s" % temprature)
+            print("账号：%s,填报成功\n" % accounts)
             return {'code': 200, 'status': 'success'}
         except Exception as e:
             print("第%s次滑动失败，正在重试" % u)
@@ -139,15 +138,26 @@ def main(i):
                 th, tw = tp_pic.shape[:2]
                 tl = max_loc
                 result = (tl[0] + tw / 2, tl[1] + th / 2)
+                os.remove('img.png')
+                os.remove('background.png')
                 slide_btn = driver.find_element(By.XPATH, '/html/body/div[3]/div/div/div/div[2]/div[2]/div[2]')
                 act = ActionChains(driver).drag_and_drop_by_offset(slide_btn, xoffset=result[0] - 27, yoffset=0)
                 act.perform()
                 act.release()
-                os.remove('img.png')
-                os.remove('background.png')
-    return {'code': 403, 'status': 'error'}
 
 
 if __name__ == '__main__':
+    start = time.perf_counter()
     for i in range(len(acc_ar)):
-        main(i)
+        for c in range(1, 30):  # 设置有30次的重试机会
+            try:
+                main(i)
+                break
+            except Exception as e:
+                print("该账号本次填报失败，进程即将重新挂起！")
+                print("报错原因:%s" % e)
+    end = time.perf_counter()
+    alltime = round(end - start)
+    print("本次运行时间为", round(alltime / 60, 2), '分钟')
+    print("已经完成%s个账号填报，本进程将在5秒后退出！" % d)
+    time.sleep(5)
