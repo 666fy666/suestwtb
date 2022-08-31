@@ -23,6 +23,8 @@ def main(i):
     opt.add_argument('--no-sandbox')  # 解决DevToolsActivePort文件不存在的报错
     opt.add_argument('window-size=1000x1150')  # 设置浏览器分辨率
     opt.add_argument('--disable-gpu')  # 谷歌文档提到需要加上这个属性来规避bug
+    user_agent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.111 Safari/537.36'
+    opt.add_argument('user-agent=%s' % user_agent)
     # opt.add_argument('--hide-scrollbars')  # 隐藏滚动条，应对一些特殊页面
     # opt.add_argument('blink-settings=imagesEnabled=false')  # 不加载图片，提升运行速度
     opt.add_argument('--headless')  # 浏览器不提供可视化界面。Linux下如果系统不支持可视化不加这条会启动失败
@@ -61,8 +63,9 @@ def main(i):
     time.sleep(2)
     name = driver.find_element_by_xpath("//*[@id='form']/div[6]/div[1]/div/div[2]/div/div/span")
     who = str(name.text)
-    driver.find_element_by_xpath('//*[@id="form"]/div[15]/div/div/div[2]/div/div/label[2]/div/ins').click()
+    driver.find_element_by_xpath('//*[@id="form"]/div[10]/div/div/div[2]/div/div/label[2]/div/ins').click()
     driver.find_element_by_xpath('//*[@id="form"]/div[18]/div/div/div[2]/div/div/label[1]/div/ins').click()
+    driver.find_element_by_xpath('//*[@id="form"]/div[19]/div/div/div[2]/div/div/label[1]/div/ins').click()
     print("姓名：【{}】".format(who))
     driver.find_element_by_xpath('//*[@id="post"]').click()
     try:
@@ -107,7 +110,8 @@ def main(i):
             time.sleep(2)
             driver.quit()
             print("第%s次滑动时成功" % u)
-            print("账号：%s,填报成功\n" % accounts)
+            print("账号：%s,填报成功" % accounts)
+            print("="*60)
             return {'code': 200, 'status': 'success'}
         except Exception as e:
             print("第%s次滑动失败，正在重试" % u)
