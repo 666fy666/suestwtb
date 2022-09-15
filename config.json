@@ -1,0 +1,16 @@
+{
+  "email":false,
+
+  "admin":true,
+
+  "adminemail":"3610528782",
+
+  "not_show":true,
+ 
+  "pushplus": "982fe9bccbaf48cca752eb7f5ff1d976",
+
+  "weather":true,
+
+  "tips":true
+  
+}
